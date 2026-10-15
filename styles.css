@@ -143,3 +143,22 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(
  .map-tools{bottom:9px;left:9px}
  footer{padding:24px 18px}
 }
+
+/* HomanWX 4.0.1 — tighter, more deliberate vertical rhythm */
+@media (min-width:701px){
+ .topbar{min-height:104px;padding-top:21px;padding-bottom:5px}
+ .page{padding-top:8px}
+ .forecast-header{margin-top:20px;margin-bottom:14px}
+}
+.notice{padding:9px 14px;line-height:1.45}
+.workspace{gap:14px}
+.card-top{padding:14px 19px}
+.panel{padding:18px}
+.panel h3{margin-top:0}
+@media (max-width:700px){
+ .topbar{padding-top:20px;padding-bottom:5px}
+ .page{padding-top:9px}
+ .forecast-header{margin-top:15px;margin-bottom:12px}
+ .card-top{padding:13px 15px}
+ .panel{padding:16px}
+}
