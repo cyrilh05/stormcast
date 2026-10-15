@@ -162,3 +162,11 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(
  .card-top{padding:13px 15px}
  .panel{padding:16px}
 }
+
+/* HomanWX 4.0.2 — city overlay and map control styling */
+.hwx-city-marker{background:transparent;border:0;white-space:nowrap;pointer-events:none}
+.hwx-city-dot{display:inline-block;width:4px;height:4px;border-radius:50%;background:#D1DCE6;box-shadow:0 0 0 1px #14212c;margin-right:4px;vertical-align:middle}
+.hwx-city-dot.is-capital{width:5px;height:5px;background:#E79A62}
+.hwx-city-name{display:inline-block;color:#E2EAF2;font-size:10px;font-weight:600;line-height:1.1;text-shadow:0 1px 3px #0D1928,1px 0 3px #0D1928,-1px 0 3px #0D1928;vertical-align:middle}
+.hwx-cities-toggle[aria-pressed="false"]{opacity:.75}
+@media(max-width:700px){.hwx-city-name{font-size:9px}}

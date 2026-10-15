@@ -134,16 +134,54 @@ function applyMapTheme(){
  $('map').style.background=c.water;
  $('map-theme').value=mapTheme;
 }
+
+// HomanWX 4.0.2 — geographically constrained navigation and offline city labels.
+const HWX_VIEW_BOUNDS=[[16,-137],[59,-55]]; // generous margin around the contiguous U.S.
+const HWX_CITIES=[["Washington, DC",38.907,-77.037,"major"],["New York",40.713,-74.006,"major"],["Los Angeles",34.052,-118.244,"major"],["Chicago",41.878,-87.63,"major"],["Houston",29.76,-95.37,"major"],["Phoenix",33.448,-112.074,"capital"],["Philadelphia",39.953,-75.164,"major"],["San Antonio",29.424,-98.494,"major"],["San Diego",32.716,-117.161,"major"],["Dallas",32.777,-96.797,"major"],["Jacksonville",30.333,-81.656,"major"],["Fort Worth",32.755,-97.331,"major"],["Columbus",39.961,-82.999,"capital"],["Indianapolis",39.768,-86.158,"capital"],["Charlotte",35.227,-80.843,"major"],["San Francisco",37.775,-122.419,"major"],["Seattle",47.606,-122.332,"major"],["Denver",39.739,-104.99,"capital"],["Nashville",36.163,-86.782,"capital"],["Oklahoma City",35.468,-97.516,"capital"],["El Paso",31.762,-106.485,"major"],["Detroit",42.331,-83.046,"major"],["Memphis",35.15,-90.049,"major"],["Boston",42.36,-71.059,"capital"],["Portland",45.515,-122.678,"major"],["Las Vegas",36.17,-115.14,"major"],["Kansas City",39.099,-94.579,"major"],["Atlanta",33.749,-84.388,"capital"],["Miami",25.762,-80.192,"major"],["Minneapolis",44.978,-93.265,"major"],["St. Louis",38.627,-90.199,"major"],["New Orleans",29.951,-90.072,"major"],["Salt Lake City",40.761,-111.891,"capital"],["Tampa",27.951,-82.457,"major"],["Cleveland",41.499,-81.694,"major"],["Pittsburgh",40.441,-79.996,"major"],["Cincinnati",39.103,-84.512,"major"],["Tulsa",36.154,-95.993,"major"],["Wichita",37.687,-97.33,"major"],["Omaha",41.256,-95.934,"major"],["Albuquerque",35.084,-106.65,"major"],["Raleigh",35.78,-78.639,"capital"],["Virginia Beach",36.852,-75.978,"major"],["Louisville",38.253,-85.759,"major"],["Sacramento",38.582,-121.494,"capital"],["Montgomery",32.377,-86.301,"capital"],["Little Rock",34.746,-92.29,"capital"],["Hartford",41.765,-72.673,"capital"],["Dover",39.158,-75.524,"capital"],["Tallahassee",30.438,-84.281,"capital"],["Boise",43.615,-116.202,"capital"],["Springfield, IL",39.782,-89.65,"capital"],["Des Moines",41.587,-93.625,"capital"],["Topeka",39.047,-95.676,"capital"],["Frankfort",38.201,-84.873,"capital"],["Baton Rouge",30.451,-91.187,"capital"],["Augusta",44.31,-69.78,"capital"],["Annapolis",38.978,-76.492,"capital"],["Lansing",42.733,-84.556,"capital"],["St. Paul",44.953,-93.09,"capital"],["Jackson, MS",32.299,-90.185,"capital"],["Jefferson City",38.577,-92.174,"capital"],["Helena",46.589,-112.04,"capital"],["Lincoln",40.814,-96.703,"capital"],["Carson City",39.164,-119.767,"capital"],["Concord",43.208,-71.538,"capital"],["Trenton",40.217,-74.743,"capital"],["Santa Fe",35.687,-105.938,"capital"],["Albany",42.652,-73.757,"capital"],["Bismarck",46.808,-100.784,"capital"],["Salem",44.943,-123.035,"capital"],["Harrisburg",40.273,-76.886,"capital"],["Providence",41.824,-71.412,"capital"],["Columbia, SC",34.001,-81.035,"capital"],["Pierre",44.368,-100.351,"capital"],["Austin",30.267,-97.743,"capital"],["Montpelier",44.26,-72.575,"capital"],["Richmond",37.541,-77.436,"capital"],["Olympia",47.038,-122.901,"capital"],["Charleston, WV",38.35,-81.633,"capital"],["Madison",43.073,-89.401,"capital"],["Cheyenne",41.14,-104.82,"capital"]];
+let hwxCityLayer=null,hwxShowCities=true;
+function hwxDrawCities(){
+ if(!liveMap||!hwxCityLayer)return;
+ hwxCityLayer.clearLayers();
+ if(!hwxShowCities)return;
+ const z=liveMap.getZoom();
+ if(z<4.25)return;
+ const viewport=liveMap.getBounds().pad(.10);
+ const shown=new Set();
+ HWX_CITIES.forEach(([name,lat,lng,type])=>{
+   const capital=type==='capital';
+   if(z<5.5&&!capital)return;
+   if(z<6.25&&capital&&!['Washington, DC','Denver','Phoenix','Atlanta','Austin','Oklahoma City','Sacramento','Nashville','Salt Lake City','Boston','Columbus','Indianapolis','Raleigh'].includes(name))return;
+   if(!viewport.contains([lat,lng]))return;
+   const key=lat.toFixed(2)+','+lng.toFixed(2);
+   if(shown.has(key))return;
+   shown.add(key);
+   L.marker([lat,lng],{pane:'hwxCityLabels',interactive:false,keyboard:false,
+      icon:L.divIcon({className:'hwx-city-marker',html:'<span class="hwx-city-dot '+(capital?'is-capital':'')+'"></span><span class="hwx-city-name">'+name.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span>',iconSize:[0,0],iconAnchor:[0,0]})
+   }).addTo(hwxCityLayer);
+ });
+}
+function hwxAddMapControls(){
+ const tools=document.querySelector('.map-tools');
+ if(!tools||document.getElementById('hwx-cities-toggle'))return;
+ const button=document.createElement('button');button.type='button';button.id='hwx-cities-toggle';
+ button.className='hwx-cities-toggle';button.setAttribute('aria-pressed','true');
+ button.textContent='Cities: On';button.title='Show or hide major cities and state capitals';
+ button.onclick=()=>{hwxShowCities=!hwxShowCities;button.textContent=hwxShowCities?'Cities: On':'Cities: Off';button.setAttribute('aria-pressed',String(hwxShowCities));hwxDrawCities()};
+ tools.append(button);
+}
+
 function initRealMap(){
  if(liveMap||typeof L==='undefined')return !!liveMap;
  try{
-  liveMap=L.map('map',{zoomControl:false,preferCanvas:false,attributionControl:false,zoomSnap:.25,minZoom:3,maxZoom:11,zoomAnimation:false,fadeAnimation:false,markerZoomAnimation:false,transform3DLimit:1e7}).setView([38.3,-97],4);
-  liveMap.on('zoomend moveend',()=>requestAnimationFrame(refreshHatches));
+  liveMap=L.map('map',{zoomControl:false,preferCanvas:false,attributionControl:false,zoomSnap:.25,minZoom:3,maxZoom:11,zoomAnimation:false,fadeAnimation:false,markerZoomAnimation:false,transform3DLimit:1e7,maxBounds:HWX_VIEW_BOUNDS,maxBoundsViscosity:1.0}).setView([38.3,-97],4);
+  liveMap.on('zoomend moveend',()=>{requestAnimationFrame(refreshHatches);hwxDrawCities()});
   geoRenderer=L.svg({padding:0.75});
   liveMap.createPane('stormcastGeography');liveMap.getPane('stormcastGeography').style.zIndex='250';
   liveMap.createPane('stormcastForecast');liveMap.getPane('stormcastForecast').style.zIndex='450';
+  liveMap.createPane('hwxCityLabels');liveMap.getPane('hwxCityLabels').style.zIndex='490';liveMap.getPane('hwxCityLabels').style.pointerEvents='none';
+  hwxCityLayer=L.layerGroup().addTo(liveMap);hwxAddMapControls();
   liveLayer=L.featureGroup().addTo(liveMap);
-  applyMapTheme();
+  applyMapTheme();hwxDrawCities();
   $('map-fallback').style.display='none';
   setTimeout(()=>{liveMap.invalidateSize();liveMap.fitBounds([[24.1,-125],[49.6,-66.2]],{padding:[24,24],animate:false});},120);
   return true;
