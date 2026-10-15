@@ -80,7 +80,7 @@ function countByKind(fs,k){return fs.filter(f=>family(f)===k&&f.properties?.visi
 function page(name){
  document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!=='page-'+name));
  document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===name));
- text('page-title',({outlook:'Convective Outlook',archive:'Outlook Archive',publish:'Public Outlooks',education:'Understand the Risks',about:'About StormCast'})[name]);
+ text('page-title',({outlook:'Severe Weather Outlooks',archive:'Outlook Archive',publish:'Public Outlooks',education:'Understand the Risks',about:'About HomanWX'})[name]);
  if(name==='archive')renderArchive();if(name==='outlook'&&liveMap)setTimeout(()=>liveMap.invalidateSize(),90);
 }
 function safeDate(v){if(!v)return 'Not specified';let d=new Date(v);return isNaN(d)?String(v):d.toLocaleString('en-US',{timeZone:'UTC',dateStyle:'medium',timeStyle:'short'})+' UTC'}

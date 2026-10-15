@@ -69,3 +69,77 @@ body:has(#map-theme option[value="dark"]:checked) .sig-severe-swatch{background:
 #builder-assist-tools{margin-top:13px}#builder-assist-tools[hidden]{display:none}
 #builder-assist-tools label{display:block;margin:12px 0}
 #builder-preview{width:100%;box-sizing:border-box;margin-top:7px;min-height:230px}
+
+/* HomanWX 4.0 — Vortex Graphite / Balanced Minimal.
+   Presentation-only overrides: preserve existing map, legends and forecast logic. */
+:root{--hw-base:#101419;--hw-panel:#252D35;--hw-accent:#8BB4E5;--hw-text:#F0F3F7;--hw-muted:#AAB6C2;--hw-line:#39434D;--hw-orange:#E79A62;
+  background:var(--hw-base);color:var(--hw-text)}
+body{background:var(--hw-base);color:var(--hw-text)}
+a,.text-button{color:var(--hw-accent)}
+.shell{display:block;min-height:100vh}
+.sidebar{position:relative;top:auto;height:auto;display:flex;flex-direction:row;align-items:center;gap:32px;padding:0 clamp(20px,5vw,72px);min-height:78px;background:#14191f;border:0;border-bottom:1px solid var(--hw-line)}
+.brand{padding:0;gap:10px;letter-spacing:.8px;flex:none}
+.brand-icon{width:34px;height:34px;font-size:23px;background:transparent;color:var(--hw-accent);border:1px solid #485968;border-radius:9px}
+.brand b{font-size:18px;letter-spacing:1px}.brand-wx{color:var(--hw-accent)}
+.brand small{font-size:8px;letter-spacing:1.2px;color:var(--hw-muted)}
+.sidebar nav{display:flex;align-items:center;gap:5px;margin-left:auto}
+.sidebar .nav{width:auto;white-space:nowrap;text-align:center;font-size:12px;font-weight:600;padding:12px 15px;border-radius:7px;color:#B4BEC9}
+.sidebar .nav.active{box-shadow:none;background:#2D3945;color:#EDF4FA}
+.sidebar .nav:hover{background:#29343E;color:white}
+.sidebar-heading,.side-bottom{display:none}
+main{max-width:1540px;margin:auto}
+.topbar{min-height:135px;padding:36px clamp(20px,5vw,72px) 12px;background:transparent;border:0}
+.topbar h1{font-size:clamp(27px,3vw,38px);font-weight:650;letter-spacing:-1px;margin-top:9px}
+.eyebrow{color:var(--hw-accent);letter-spacing:1.3px;font-size:10px}
+.chip{background:#252D35;color:#C4D2DE;border:1px solid var(--hw-line);border-radius:6px}
+.page{padding:20px clamp(20px,5vw,72px) 70px;max-width:none}
+.notice{background:#27231f;border:1px solid #514235;border-radius:8px;color:#D8C5B0;padding:11px 15px}
+.notice b{color:var(--hw-orange)}
+.forecast-header{margin:32px 0 21px}
+.forecast-header h2,.section-head h2{font-weight:650;letter-spacing:-.55px}
+.muted{color:var(--hw-muted)}
+.status{background:#24352F;border-color:#426C59;color:#A7D9C1}
+.workspace{grid-template-columns:minmax(0,1.85fr) minmax(280px,.7fr);gap:16px}
+.map-card,.panel,.edu-section,.edu-intro,.edu-risk-card,.edu-three article,.archive-item,.archive-card,.about{background:var(--hw-panel);border:1px solid var(--hw-line);border-radius:10px;box-shadow:none}
+.map-card{box-shadow:none}
+.card-top{padding:19px 22px}
+.card-top b{font-size:15px;font-weight:650}
+.card-top small,.subtle{color:var(--hw-muted)}
+.tabs{border-bottom:1px solid var(--hw-line);padding:0 15px}
+.tab{color:#B4C0CD;font-weight:600;padding:13px 15px;border-bottom-width:2px}
+.tab.active{color:var(--hw-accent);border-color:var(--hw-accent)}
+.tab:hover{color:white}
+.map-container{height:clamp(370px,42vw,610px)}
+.map-tools{background:#1A2129ed;border-color:#4B5967;box-shadow:none}
+.map-tools select,.map-tools button{background:#303D48;border-color:#586977;color:#E4EDF5}
+.map-controls button,.map-badge{background:#202A34ed;border-color:#536473;color:#E4EDF5}
+.map-footer,.legend-panel,.map-learn{border-color:var(--hw-line)}
+.legend-panel{background:#20272E}
+.legend-heading strong,.legend-scale-item,.legend-note,.legend-heading span{color:#C4D0DC}
+.legend-scale-item{border-color:#495563}
+.legend-scale-item.present{background:#334250;border-color:var(--hw-accent)}
+.panel{padding:22px}.panel h3{font-weight:650}
+.panel p,.discussion-text{color:#C2CDD8}
+.meta{border-color:var(--hw-line)}.meta span{color:var(--hw-muted)}
+.feature-details{background:#2A3540;border-color:var(--hw-line)}
+.edu-intro,.edu-section,.edu-risk-card,.edu-three article,.edu-hazard-details,.edu-checklist label{background:var(--hw-panel);border-color:var(--hw-line)}
+.edu-hazard{background:#303A44;border-color:#4B5864;color:#D5E0E9}
+.edu-hazard.active{background:#3A5065;border-color:var(--hw-accent);color:white}
+.edu-section p,.edu-risk-card p{color:#C6D0DA}
+footer{background:transparent;border-top:1px solid var(--hw-line);color:var(--hw-muted);padding:25px clamp(20px,5vw,72px)}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(--hw-accent);outline-offset:3px}
+@media(max-width:1050px){.workspace{grid-template-columns:1fr}.map-container{height:clamp(360px,54vw,580px)}}
+@media(max-width:700px){
+ .sidebar{min-height:auto;padding:15px 18px 10px;display:block}
+ .brand{padding:0 0 13px}.sidebar nav{display:flex;overflow-x:auto;gap:5px;margin:0}
+ .sidebar .nav{padding:10px 12px;font-size:12px}
+ .topbar{min-height:auto;padding:26px 18px 9px}
+ .topbar h1{font-size:27px}
+ .page{padding:16px 18px 48px}
+ .map-container{height:390px}
+ .forecast-header{margin:22px 0 16px}
+ .chip{display:none}
+ .notice{display:grid}
+ .map-tools{bottom:9px;left:9px}
+ footer{padding:24px 18px}
+}
